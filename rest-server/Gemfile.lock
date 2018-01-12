@@ -43,6 +43,7 @@ GEM
       rake (>= 10.4, < 13.0)
     arel (8.0.0)
     ast (2.3.0)
+    awesome_print (1.8.0)
     blankslate (2.1.2.4)
     brakeman (4.1.1)
     builder (3.2.3)
@@ -88,6 +89,7 @@ GEM
       multi_xml (>= 0.5.2)
     i18n (0.9.1)
       concurrent-ruby (~> 1.0)
+    json (2.1.0)
     license_finder (4.0.2)
       bundler
       httparty
@@ -171,6 +173,9 @@ GEM
     rspec-expectations (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
+    rspec-json_matcher (0.1.6)
+      awesome_print
+      json
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
@@ -241,6 +246,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.7)
   rails (~> 5.1.4)
+  rspec-json_matcher
   rspec-rails (~> 3.7)
   rspec_junit_formatter
   rubocop
