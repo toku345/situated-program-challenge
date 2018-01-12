@@ -33,6 +33,7 @@ group :development, :test do
   gem 'faker'
   gem 'guard-rspec', require: false
   gem 'pry-rails'
+  gem 'rspec_junit_formatter'
 end
 
 group :development do
