@@ -1,3 +1,5 @@
 linter:
   rubocop:
     root_dir: 'rest-server'
+  brakeman:
+    root_dir: 'rest-server'
