@@ -1,2 +1,36 @@
 inherit_from: .rubocop_todo.yml
 
+# Common configuration.
+AllCops:
+  Exclude:
+    - 'vendor/**/*'
+    - 'Guardfile'
+    - 'spec/spec_helper.rb'
+    - 'spec/rails_helper.rb'
+    - 'db/schema.rb'
+    - 'db/migrate/*.rb'
+    - 'config/*.rb'
+    - 'config/**/*.rb'
+    - 'lib/tasks/*.rake'
+
+# コメントに日本語使えるようにする
+Style/AsciiComments:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*.rb'
+
+Metrics/LineLength:
+  Exclude:
+    - 'db/seeds.rb'
+  Max: 100
+  # To make it possible to copy or click on URIs in the code, we allow lines
+  # contaning a URI to be longer than Max.
+  AllowURI: true
+  URISchemes:
+    - http
+    - https
