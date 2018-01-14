@@ -15,11 +15,24 @@ ActiveRecord::Schema.define() do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "groups", id: :serial, force: :cascade do |t|
+    t.text "name"
+    t.datetime "created_at"
+    t.index ["name"], name: "groups_name"
+  end
+
+  create_table "groups_members", primary_key: ["group_id", "member_id"], force: :cascade do |t|
+    t.integer "group_id", null: false
+    t.integer "member_id", null: false
+    t.boolean "admin", default: false
+  end
+
   create_table "meetups", id: :serial, force: :cascade do |t|
     t.text "title", null: false
     t.datetime "start_at"
     t.datetime "end_at"
     t.integer "venue_id"
+    t.integer "group_id"
     t.index ["title"], name: "meetups_title"
   end
 
@@ -42,6 +55,7 @@ ActiveRecord::Schema.define() do
     t.text "city"
     t.text "street1"
     t.text "street2"
+    t.integer "group_id"
     t.index ["name"], name: "venues_name"
   end
 
