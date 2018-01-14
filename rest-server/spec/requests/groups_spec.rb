@@ -70,5 +70,13 @@ describe 'groups API', type: :request do
         expect(response.body).to be_json_as(expected_response_body)
       end
     end
+
+    it '複数groups返却できること' do
+      create(:group)
+      get '/groups'
+
+      groups = JSON.parse(response.body)
+      expect(groups.count).to be 2
+    end
   end
 end
