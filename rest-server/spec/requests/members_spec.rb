@@ -56,4 +56,26 @@ describe 'members API', type: :request do
       end
     end
   end
+
+  describe 'GET /members/{member-id}' do
+    let!(:member) { create(:member) }
+
+    let(:expected_response_body) do
+      {
+        'member-id'  => member.id,
+        'first-name' => member.first_name,
+        'last-name'  => member.last_name,
+        'email'      => member.email
+      }
+    end
+
+    it 'メンバー情報を取得できること' do
+      get "/members/#{member.id}"
+
+      aggregate_failures do
+        expect(response).to be_success
+        expect(response.body).to be_json_as(expected_response_body)
+      end
+    end
+  end
 end

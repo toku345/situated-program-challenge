@@ -9,6 +9,10 @@ class MembersController < ApplicationController
                             email:      member_params['email'])
   end
 
+  def show
+    @member = Member.find(params[:id])
+  end
+
   private
 
   def member_params
