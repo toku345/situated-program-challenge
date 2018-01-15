@@ -2,21 +2,23 @@ require 'rails_helper'
 
 describe 'groups API', type: :request do
   describe 'GET /groups' do
-    let!(:group) { create(:group) }
+    let!(:groups_member) { create(:groups_member, admin: true) }
+    let(:group)  { groups_member.group }
+    let(:member) { groups_member.member }
 
     # TODO: admin, venues, meetups は各リソースを追加したら詳細な値に置き換えること　
     let(:expected_response_body) do
       [
         {
-          'group-id' => group.id,
+          'group-id' =>   group.id,
           'group-name' => group.name,
           'admin' => [
-            # {
-            #   'member-id' => 0,
-            #   'first-name' => 'string',
-            #   'last-name' => 'string',
-            #   'email' => 'string'
-            # }
+            {
+              'member-id'  => member.id,
+              'first-name' => member.first_name,
+              'last-name'  => member.last_name,
+              'email'      => member.email
+            }
           ],
           'venues' => [
             # {
