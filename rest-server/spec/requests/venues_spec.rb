@@ -45,4 +45,43 @@ describe 'venues API', type: :request do
       end
     end
   end
+
+  describe 'POST /groups/{group-id}/venues' do
+    let(:group) { create(:group) }
+    let(:params) do
+      {
+        'venue-name' => 'テスト会場',
+        'address' => {
+          'postal-code' => '813-0035',
+          'prefecture'  => '福岡県',
+          'city'        => '福岡市',
+          'address1'    => '東区',
+          'address2'    => '松崎3丁目'
+        }
+      }
+    end
+
+    let(:expected_response_body) do
+      {
+        'venue-id'   => Integer,
+        'venue-name' => 'テスト会場',
+        'address' => {
+          'postal-code' => '813-0035',
+          'prefecture'  => '福岡県',
+          'city'        => '福岡市',
+          'address1'    => '東区',
+          'address2'    => '松崎3丁目'
+        }
+      }
+    end
+
+    it '会場の登録ができること' do
+      aggregate_failures do
+        expect { post "/groups/#{group.id}/venues", params: params }.to change(Venue, :count).by 1
+
+        expect(response).to be_success
+        expect(response.body).to be_json_as(expected_response_body)
+      end
+    end
+  end
 end
