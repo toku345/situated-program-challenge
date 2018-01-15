@@ -5,8 +5,9 @@ describe 'members_groups API', type: :request do
     context 'admin = true のとき' do
       let(:member) { create(:member) }
       let(:group)  { create(:group) }
+      let!(:venue) { create(:venue, group: group) }
 
-      # TODO: venues, meetups は各リソースを追加したら詳細な値に置き換えること　
+      # TODO: meetups は各リソースを追加したら詳細な値に置き換えること　
       let(:expected_response_body) do
         {
           'group-id'   => group.id,
@@ -20,17 +21,17 @@ describe 'members_groups API', type: :request do
             }
           ],
           'venues' => [
-            # {
-            #   'venue-id' => 0,
-            #   'venue-name' => 'string',
-            #   'address' => {
-            #     'postal-code' => 'string',
-            #     'prefecture' => 'string',
-            #     'city' => 'string',
-            #     'address1' => 'string',
-            #     'address2' => 'string'
-            #   }
-            # }
+            {
+              'venue-id'   => venue.id,
+              'venue-name' => venue.name,
+              'address' => {
+                'postal-code' => venue.postal_code,
+                'prefecture'  => venue.prefecture,
+                'city'        => venue.city,
+                'address1'    => venue.street1,
+                'address2'    => venue.street2
+              }
+            }
           ],
           'meetups' => [
             # {
@@ -77,25 +78,26 @@ describe 'members_groups API', type: :request do
     context 'admin = false のとき' do
       let(:member) { create(:member) }
       let(:group)  { create(:group) }
+      let!(:venue) { create(:venue, group: group) }
 
-      # TODO: venues, meetups は各リソースを追加したら詳細な値に置き換えること　
+      # TODO: meetups は各リソースを追加したら詳細な値に置き換えること　
       let(:expected_response_body) do
         {
           'group-id'   => group.id,
           'group-name' => group.name,
           'admin' => [], # 空
           'venues' => [
-            # {
-            #   'venue-id' => 0,
-            #   'venue-name' => 'string',
-            #   'address' => {
-            #     'postal-code' => 'string',
-            #     'prefecture' => 'string',
-            #     'city' => 'string',
-            #     'address1' => 'string',
-            #     'address2' => 'string'
-            #   }
-            # }
+            {
+              'venue-id'   => venue.id,
+              'venue-name' => venue.name,
+              'address' => {
+                'postal-code' => venue.postal_code,
+                'prefecture'  => venue.prefecture,
+                'city'        => venue.city,
+                'address1'    => venue.street1,
+                'address2'    => venue.street2
+              }
+            }
           ],
           'meetups' => [
             # {
