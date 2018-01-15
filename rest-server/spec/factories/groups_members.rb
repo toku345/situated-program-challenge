@@ -2,8 +2,8 @@
 #
 # Table name: groups_members
 #
-#  group_id  :integer          not null
-#  member_id :integer          not null
+#  group_id  :integer          not null, primary key
+#  member_id :integer          not null, primary key
 #  admin     :boolean          default(FALSE)
 #
 
