@@ -81,4 +81,49 @@ describe 'groups API', type: :request do
       expect(groups.count).to be 2
     end
   end
+
+  describe 'POST /groups' do
+    let(:member1) { create(:member) }
+    let(:member2) { create(:member) }
+
+    let(:expected_response_body) do
+      {
+        'group-id' =>   Integer,
+        'group-name' => 'TEST GROUP',
+        'admin' => [
+          {
+            'member-id' =>  member1.id,
+            'first-name' => member1.first_name,
+            'last-name' =>  member1.last_name,
+            'email' =>      member1.email
+          },
+          {
+            'member-id' =>  member2.id,
+            'first-name' => member2.first_name,
+            'last-name' =>  member2.last_name,
+            'email' =>      member2.email
+          }
+        ]
+      }
+    end
+
+    it 'グループを登録できること' do
+      aggregate_failures do
+        expect do
+          post '/groups', params: { 'group-name' => 'TEST GROUP',
+                                    'admin-member-ids' => [member1.id, member2.id] }
+        end.to change(Group, :count).by 1
+
+        expect(response).to be_success
+        expect(response.body).to be_json_as(expected_response_body)
+      end
+    end
+
+    it 'adminメンバーを適切に登録できること' do
+      expect do
+        post '/groups', params: { 'group-name' => 'TEST GROUP',
+                                  'admin-member-ids' => [member1.id, member2.id] }
+      end.to change(GroupsMember, :count).by 2
+    end
+  end
 end

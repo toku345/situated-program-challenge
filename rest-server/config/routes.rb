@@ -5,5 +5,5 @@ Rails.application.routes.draw do
     # resources :groups, only: [:update], controller: :members_groups
     post '/groups/:id', to: 'members_groups#create'
   end
-  resources :groups, defaults: { format: :json }, only: [:index]
+  resources :groups, defaults: { format: :json }, only: [:index, :create]
 end
