@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 describe 'members_groups API', type: :request do
-  describe 'PUT /members/{member-id}/groups/{group-id}' do
-    let!(:member) { create(:member) }
-    let!(:group)  { create(:group) }
-
+  describe 'POST /members/{member-id}/groups/{group-id}' do
     context 'admin = true のとき' do
+      let(:member) { create(:member) }
+      let(:group)  { create(:group) }
+
       # TODO: venues, meetups は各リソースを追加したら詳細な値に置き換えること　
       let(:expected_response_body) do
         {
@@ -65,7 +65,7 @@ describe 'members_groups API', type: :request do
       it 'メンバーが指定したグループに参加できること' do
         aggregate_failures do
           expect do
-            put "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
+            post "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
           end.to change(GroupsMember, :count).by 1
 
           expect(response).to be_success
@@ -75,6 +75,9 @@ describe 'members_groups API', type: :request do
     end
 
     context 'admin = false のとき' do
+      let(:member) { create(:member) }
+      let(:group)  { create(:group) }
+
       # TODO: venues, meetups は各リソースを追加したら詳細な値に置き換えること　
       let(:expected_response_body) do
         {
@@ -127,7 +130,7 @@ describe 'members_groups API', type: :request do
       it 'メンバーが指定したグループに参加できること' do
         aggregate_failures do
           expect do
-            put "/members/#{member.id}/groups/#{group.id}", params: { admin: false }
+            post "/members/#{member.id}/groups/#{group.id}", params: { admin: false }
           end.to change(GroupsMember, :count).by 1
 
           expect(response).to be_success
@@ -137,23 +140,26 @@ describe 'members_groups API', type: :request do
     end
 
     context '同一メンバー・グループで複数回APIを叩かれたとき' do
-      it '新しいレコードを作らずにadmin情報のみ更新すること' do
+      let(:member) { create(:member) }
+      let(:group)  { create(:group) }
+
+      it '新しいレコードを作成せず、admin情報も更新しないこと' do
         aggregate_failures do
           # 1回目
-          put "/members/#{member.id}/groups/#{group.id}", params: { admin: false }
+          post "/members/#{member.id}/groups/#{group.id}", params: { admin: false }
           expect(GroupsMember.first.admin).to be_falsey
 
           # 2回目
           expect do
-            put "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
+            post "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
           end.not_to change(GroupsMember, :count)
-          expect(GroupsMember.first.admin).to be_truthy
+          expect(GroupsMember.first.admin).to be_falsey # 2回目以降はadminは更新しない(仮設計)
 
           # 3回目
           expect do
-            put "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
+            post "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
           end.not_to change(GroupsMember, :count)
-          expect(GroupsMember.first.admin).to be_truthy
+          expect(GroupsMember.first.admin).to be_falsey # 2回目以降はadminは更新しない(仮設計)
         end
       end
     end
