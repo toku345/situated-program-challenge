@@ -8,7 +8,7 @@ class MembersGroupsController < ApplicationController
                             admin: params[:admin])
       else
         # 指定されたメンバーは既にグループに登録済み
-        # TODO: APIドキュメントには指定無いため、レコード情報は更新しない(= admin更新しない)ことにする
+        # NOTE: APIドキュメントには指定無いため、レコード情報は更新しない(= admin更新しない)ことにする
         #       更新するためには PUT/PATCH でコールすべき?
         groups_members.first
       end
