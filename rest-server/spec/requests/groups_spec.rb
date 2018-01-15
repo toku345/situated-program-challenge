@@ -5,8 +5,9 @@ describe 'groups API', type: :request do
     let!(:groups_member) { create(:groups_member, admin: true) }
     let(:group)  { groups_member.group }
     let(:member) { groups_member.member }
+    let!(:venue) { create(:venue, group: group) }
 
-    # TODO: admin, venues, meetups は各リソースを追加したら詳細な値に置き換えること　
+    # TODO: meetups は各リソースを追加したら詳細な値に置き換えること　
     let(:expected_response_body) do
       [
         {
@@ -21,17 +22,17 @@ describe 'groups API', type: :request do
             }
           ],
           'venues' => [
-            # {
-            #   'venue-id' => 0,
-            #   'venue-name' => 'string',
-            #   'address' => {
-            #     'postal-code' => 'string',
-            #     'prefecture' => 'string',
-            #     'city' => 'string',
-            #     'address1' => 'string',
-            #     'address2' => 'string'
-            #   }
-            # }
+            {
+              'venue-id'   => venue.id,
+              'venue-name' => venue.name,
+              'address' => {
+                'postal-code' => venue.postal_code,
+                'prefecture'  => venue.prefecture,
+                'city'        => venue.city,
+                'address1'    => venue.street1,
+                'address2'    => venue.street2
+              }
+            }
           ],
           'meetups' => [
             # {

@@ -16,6 +16,10 @@ json.array! @groups do |group|
     end
   end
 
-  json.venues []
+  json.venues do
+    json.array!(group.venues) do |venue|
+      json.partial! 'partials/venue', venue: venue
+    end
+  end
   json.meetups []
 end
