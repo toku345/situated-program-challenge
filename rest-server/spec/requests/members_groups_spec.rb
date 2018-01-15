@@ -1,0 +1,161 @@
+require 'rails_helper'
+
+describe 'members_groups API', type: :request do
+  describe 'PUT /members/{member-id}/groups/{group-id}' do
+    let!(:member) { create(:member) }
+    let!(:group)  { create(:group) }
+
+    context 'admin = true のとき' do
+      # TODO: venues, meetups は各リソースを追加したら詳細な値に置き換えること　
+      let(:expected_response_body) do
+        {
+          'group-id'   => group.id,
+          'group-name' => group.name,
+          'admin' => [
+            {
+              'member-id'  => member.id,
+              'first-name' => member.first_name,
+              'last-name'  => member.last_name,
+              'email'      => member.email
+            }
+          ],
+          'venues' => [
+            # {
+            #   'venue-id' => 0,
+            #   'venue-name' => 'string',
+            #   'address' => {
+            #     'postal-code' => 'string',
+            #     'prefecture' => 'string',
+            #     'city' => 'string',
+            #     'address1' => 'string',
+            #     'address2' => 'string'
+            #   }
+            # }
+          ],
+          'meetups' => [
+            # {
+            #   'event-id' => 0,
+            #   'title' => 'string',
+            #   'start-at' => '2018-01-14T08 =>43 =>19.764Z',
+            #   'end-at' => '2018-01-14T08 =>43 =>19.764Z',
+            #   'venue' => {
+            #     'venue-id' => 0,
+            #     'venue-name' => 'string',
+            #     'address' => {
+            #       'postal-code' => 'string',
+            #       'prefecture' => 'string',
+            #       'city' => 'string',
+            #       'address1' => 'string',
+            #       'address2' => 'string'
+            #     }
+            #   },
+            #   'members' => [
+            #     {
+            #       'member-id' => 0,
+            #       'first-name' => 'string',
+            #       'last-name' => 'string',
+            #       'email' => 'string'
+            #     }
+            #   ]
+            # }
+          ]
+        }
+      end
+
+      it 'メンバーが指定したグループに参加できること' do
+        aggregate_failures do
+          expect do
+            put "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
+          end.to change(GroupsMember, :count).by 1
+
+          expect(response).to be_success
+          expect(response.body).to be_json_as(expected_response_body)
+        end
+      end
+    end
+
+    context 'admin = false のとき' do
+      # TODO: venues, meetups は各リソースを追加したら詳細な値に置き換えること　
+      let(:expected_response_body) do
+        {
+          'group-id'   => group.id,
+          'group-name' => group.name,
+          'admin' => [], # 空
+          'venues' => [
+            # {
+            #   'venue-id' => 0,
+            #   'venue-name' => 'string',
+            #   'address' => {
+            #     'postal-code' => 'string',
+            #     'prefecture' => 'string',
+            #     'city' => 'string',
+            #     'address1' => 'string',
+            #     'address2' => 'string'
+            #   }
+            # }
+          ],
+          'meetups' => [
+            # {
+            #   'event-id' => 0,
+            #   'title' => 'string',
+            #   'start-at' => '2018-01-14T08 =>43 =>19.764Z',
+            #   'end-at' => '2018-01-14T08 =>43 =>19.764Z',
+            #   'venue' => {
+            #     'venue-id' => 0,
+            #     'venue-name' => 'string',
+            #     'address' => {
+            #       'postal-code' => 'string',
+            #       'prefecture' => 'string',
+            #       'city' => 'string',
+            #       'address1' => 'string',
+            #       'address2' => 'string'
+            #     }
+            #   },
+            #   'members' => [
+            #     {
+            #       'member-id' => 0,
+            #       'first-name' => 'string',
+            #       'last-name' => 'string',
+            #       'email' => 'string'
+            #     }
+            #   ]
+            # }
+          ]
+        }
+      end
+
+      it 'メンバーが指定したグループに参加できること' do
+        aggregate_failures do
+          expect do
+            put "/members/#{member.id}/groups/#{group.id}", params: { admin: false }
+          end.to change(GroupsMember, :count).by 1
+
+          expect(response).to be_success
+          expect(response.body).to be_json_as(expected_response_body)
+        end
+      end
+    end
+
+    context '同一メンバー・グループで複数回APIを叩かれたとき' do
+      it '新しいレコードを作らずにadmin情報のみ更新すること' do
+        aggregate_failures do
+          # 1回目
+          put "/members/#{member.id}/groups/#{group.id}", params: { admin: false }
+          expect(GroupsMember.first.admin).to be_falsey
+
+          # 2回目
+          expect do
+            put "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
+          end.not_to change(GroupsMember, :count)
+          expect(GroupsMember.first.admin).to be_truthy
+
+          # 3回目
+          expect do
+            put "/members/#{member.id}/groups/#{group.id}", params: { admin: true }
+          end.not_to change(GroupsMember, :count)
+          expect(GroupsMember.first.admin).to be_truthy
+        end
+      end
+    end
+  end
+end

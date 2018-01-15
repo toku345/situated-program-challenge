@@ -13,4 +13,6 @@
 #
 
 class Member < ApplicationRecord
+  has_many :groups_members
+  has_many :groups, through: :groups_members
 end

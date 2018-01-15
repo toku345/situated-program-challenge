@@ -55,6 +55,8 @@ GEM
       thor (~> 0.18)
     byebug (9.1.0)
     coderay (1.1.2)
+    composite_primary_keys (10.0.2)
+      activerecord (~> 5.1.0, >= 5.1.4)
     concurrent-ruby (1.0.5)
     crass (1.0.3)
     database_cleaner (1.6.2)
@@ -240,6 +242,7 @@ DEPENDENCIES
   bullet
   bundler-audit
   byebug
+  composite_primary_keys (~> 10.x)
   database_cleaner
   factory_bot_rails
   faker
