@@ -17,4 +17,6 @@
 class Meetup < ApplicationRecord
   belongs_to :group
   belongs_to :venue
+  has_many :meetups_members, dependent: :destroy
+  has_many :members, through: :meetups_members
 end

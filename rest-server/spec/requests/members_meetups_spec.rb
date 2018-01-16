@@ -2,9 +2,10 @@ require 'rails_helper'
 
 describe 'members_meetups API', type: :request do
   describe 'POST /members/{member-id}/meetups/{event-id}' do
-    let!(:member)        { create(:member) }
+    let!(:member)        { create(:member) } # グループ非加入メンバー
+    let!(:member2)       { create(:member) }
     let!(:group)         { create(:group) }
-    let!(:groups_member) { create(:groups_member, group: group, member: member) }
+    let!(:groups_member) { create(:groups_member, group: group, member: member2) }
     let!(:venue)         { create(:venue, group: group) }
     let!(:meetup)        { create(:meetup, group: group, venue: venue) }
 

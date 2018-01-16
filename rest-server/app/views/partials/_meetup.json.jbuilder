@@ -8,7 +8,7 @@ json.venue do
 end
 
 json.members do
-  json.array! meetup.group.members do |member|
+  json.array! meetup.members do |member|
     json.member_id  member.id
     json.first_name member.first_name
     json.last_name  member.last_name

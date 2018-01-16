@@ -2,11 +2,13 @@ require 'rails_helper'
 
 describe 'meetups API', type: :request do
   describe 'GET /groups/{group-id}/meetups' do
-    let!(:group)         { create(:group) }
-    let!(:venue)         { create(:venue, group: group) }
-    let!(:meetup)        { create(:meetup, group: group, venue: venue) }
-    let!(:member)        { create(:member) }
-    let!(:groups_member) { create(:groups_member, group: group, member: member) }
+    let!(:group)          { create(:group) }
+    let!(:venue)          { create(:venue, group: group) }
+    let!(:meetup)         { create(:meetup, group: group, venue: venue) }
+    let!(:member)         { create(:member) } # グループ非加入だけどミートアップ参加メンバー
+    let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
+    let!(:member2)        { create(:member) }
+    let!(:groups_member)  { create(:groups_member, group: group, member: member2) }
 
     let(:expected_response_body) do
       [
@@ -80,14 +82,7 @@ describe 'meetups API', type: :request do
             'address2'    => venue.street2
           }
         },
-        'members' => [
-          {
-            'member-id'  => member.id,
-            'first-name' => member.first_name,
-            'last-name'  => member.last_name,
-            'email'      => member.email
-          }
-        ]
+        'members' => []
       }
     end
 
@@ -102,11 +97,13 @@ describe 'meetups API', type: :request do
   end
 
   describe 'GET /groups/{group-id}/meetups/{event-id}' do
-    let!(:group)         { create(:group) }
-    let!(:venue)         { create(:venue, group: group) }
-    let!(:meetup)        { create(:meetup, group: group, venue: venue) }
-    let!(:member)        { create(:member) }
-    let!(:groups_member) { create(:groups_member, group: group, member: member) }
+    let!(:group)          { create(:group) }
+    let!(:venue)          { create(:venue, group: group) }
+    let!(:meetup)         { create(:meetup, group: group, venue: venue) }
+    let!(:member)         { create(:member) } # グループ非加入だけどミートアップ参加メンバー
+    let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
+    let!(:member2)        { create(:member) }
+    let!(:groups_member)  { create(:groups_member, group: group, member: member2) }
 
     let(:expected_response_body) do
       {
