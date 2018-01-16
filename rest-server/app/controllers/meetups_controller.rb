@@ -10,6 +10,10 @@ class MeetupsController < ApplicationController
                     start_at: meetup_params['start-at'], end_at: meetup_params['end-at'])
   end
 
+  def show
+    @meetup = Meetup.find_by(group_id: params[:group_id], id: params[:id])
+  end
+
   private
 
   def meetup_params
