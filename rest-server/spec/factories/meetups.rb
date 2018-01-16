@@ -20,10 +20,7 @@ FactoryBot.define do
     start_at { Time.current + 2.weeks } # 2週間後
     end_at   { start_at + 1.hour }
 
-    after :build do |meetup|
-      venue = create(:venue)
-      meetup.group_id = venue.group.id
-      meetup.venue_id = venue.id
-    end
+    association :group, factory: :group
+    association :venue, factory: :venue
   end
 end

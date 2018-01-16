@@ -7,5 +7,6 @@ Rails.application.routes.draw do
   end
   resources :groups, defaults: { format: :json }, only: [:index, :create] do
     resources :venues, only: [:index, :create]
+    resources :meetups, only: [:index]
   end
 end
