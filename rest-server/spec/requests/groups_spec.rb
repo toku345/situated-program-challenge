@@ -2,12 +2,13 @@ require 'rails_helper'
 
 describe 'groups API', type: :request do
   describe 'GET /groups' do
-    let!(:groups_member) { create(:groups_member, admin: true) }
-    let(:group)  { groups_member.group }
-    let(:member) { groups_member.member }
-    let!(:venue) { create(:venue, group: group) }
+    let!(:groups_member)  { create(:groups_member, admin: true) }
+    let(:group)           { groups_member.group }
+    let(:member)          { groups_member.member }
+    let!(:venue)          { create(:venue, group: group) }
+    let!(:meetup)         { create(:meetup, group: group, venue: venue) }
+    let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
 
-    # TODO: meetups は各リソースを追加したら詳細な値に置き換えること　
     let(:expected_response_body) do
       [
         {
@@ -35,31 +36,31 @@ describe 'groups API', type: :request do
             }
           ],
           'meetups' => [
-            # {
-            #   'event-id' => 0,
-            #   'title' => 'string',
-            #   'start-at' => '2018-01-14T04 =>43 =>46.440Z',
-            #   'end-at' => '2018-01-14T04 =>43 =>46.440Z',
-            #   'venue' => {
-            #     'venue-id' => 0,
-            #     'venue-name' => 'string',
-            #     'address' => {
-            #       'postal-code' => 'string',
-            #       'prefecture' => 'string',
-            #       'city' => 'string',
-            #       'address1' => 'string',
-            #       'address2' => 'string'
-            #     }
-            #   },
-            #   'members' => [
-            #     {
-            #       'member-id' => 0,
-            #       'first-name' => 'string',
-            #       'last-name' => 'string',
-            #       'email' => 'string'
-            #     }
-            #   ]
-            # }
+            {
+              'event-id' => meetup.id,
+              'title'    => meetup.title,
+              'start-at' => meetup.start_at.utc.strftime('%FT%H:%M:%S.%LZ'),
+              'end-at'   => meetup.end_at.utc.strftime('%FT%H:%M:%S.%LZ'),
+              'venue' => {
+                'venue-id'   => venue.id,
+                'venue-name' => venue.name,
+                'address' => {
+                  'postal-code' => venue.postal_code,
+                  'prefecture'  => venue.prefecture,
+                  'city'        => venue.city,
+                  'address1'    => venue.street1,
+                  'address2'    => venue.street2
+                }
+              },
+              'members' => [
+                {
+                  'member-id'  => member.id,
+                  'first-name' => member.first_name,
+                  'last-name'  => member.last_name,
+                  'email'      => member.email
+                }
+              ]
+            }
           ]
         }
       ]

@@ -21,5 +21,10 @@ json.array! @groups do |group|
       json.partial! 'partials/venue', venue: venue
     end
   end
-  json.meetups []
+
+  json.meetups do
+    json.array!(group.meetups) do |meetup|
+      json.partial! 'partials/meetup', meetup: meetup
+    end
+  end
 end
