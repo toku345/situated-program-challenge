@@ -1,24 +1,30 @@
-# README
+# Requirement
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+- Ruby : (開発では2.5.0を使用)
+- bundler : (開発では1.16.1を使用)
+- PostgreSQL 9.0 or later (with headers, -dev packages, etc) : gem 'pg' のコンパイルに必要
 
-Things you may want to cover:
+※ DBは docker-compose などで立ち上げておいてください
 
-* Ruby version
+# Installation
 
-* System dependencies
+    $ cd rest-server
+    $ bundle install
 
-* Configuration
+# Usage
 
-* Database creation
+## サーバー起動
 
-* Database initialization
+    $ ./bin/rails server
 
-* How to run the test suite
+## REPL起動
 
-* Services (job queues, cache servers, search engines, etc.)
+    $ ./bin/rails console
 
-* Deployment instructions
+## テスト実行
 
-* ...
+    $ ./bin/bundle exec rspec
+
+### ファイル更新を契機にテスト実行させる
+
+    $ ./bin/bundle exec guard
