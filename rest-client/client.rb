@@ -3,24 +3,16 @@ require 'thor'
 require 'faraday'
 
 class RestClient < Thor
-  desc 'get http://localhost:3000/person [key1=value1 key2=value2]', 'get サーバURL [パラメタ]'
-  def get(url, *args)
-    params = convert_to_params(args)
-    res = Faraday.get(url, params)
+  desc 'get <URL>', 'get <サーバURL>'
+  def get(url)
+    res = Faraday.get(url, content_type: 'application/json')
     puts res.body
   end
 
-  desc 'get http://localhost:3000/person key1=value1 key2=value2', 'post サーバURL [パラメタ]'
-  def post(url, *args)
-    params = convert_to_params(args)
-    res = Faraday.post(url, params)
+  desc 'post <URL> <JSONデータ>', 'post <サーバURL> <JSONデータ>'
+  def post(url, params = nil)
+    res = Faraday.post(url, params, content_type: 'application/json')
     puts res.body
-  end
-
-  private
-
-  def convert_to_params(args)
-    Hash[*args.map { |arg| arg.split('=') }.flatten]
   end
 end
 
