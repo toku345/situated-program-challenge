@@ -16,4 +16,8 @@ class Group < ApplicationRecord
   has_many :members, through: :groups_members
   has_many :venues, dependent: :destroy
   has_many :meetups, dependent: :destroy
+
+  def admins
+    members.joins(:groups_members).where(groups_members: { admin: true })
+  end
 end
