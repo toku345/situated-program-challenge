@@ -4,13 +4,20 @@ class GroupsController < ApplicationController
   end
 
   def create
-    @group = Group.create(name: params['group-name'])
+    @group = Group.create(group_params)
 
     # admin メンバー登録
     params['admin-member-ids'].map do |id|
       @group.groups_members.create(member_id: id, admin: true)
     end
 
-    @admins = @group.members.where(groups_members: { admin: true })
+    @admins = @group.admins
+  end
+
+  private
+
+  def group_params
+    @group_params ||=
+      snake_params.permit('group_name').transform_keys { |k| k == 'group_name' ? 'name' : k }
   end
 end

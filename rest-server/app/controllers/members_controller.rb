@@ -4,9 +4,7 @@ class MembersController < ApplicationController
   end
 
   def create
-    @member = Member.create(first_name: member_params['first-name'],
-                            last_name:  member_params['last-name'],
-                            email:      member_params['email'])
+    @member = Member.create(member_params)
   end
 
   def show
@@ -16,6 +14,7 @@ class MembersController < ApplicationController
   private
 
   def member_params
-    @member_params ||= params.permit('first-name', 'last-name', 'email')
+    @member_params ||=
+      snake_params.permit('first_name', 'last_name', 'email')
   end
 end

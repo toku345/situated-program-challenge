@@ -3,22 +3,21 @@ class VenuesController < ApplicationController
     @venues = Venue.where(group_id: params[:group_id])
   end
 
-  # rubocop:disable Metrics/AbcSize
   def create
-    @venue =
-      Venue.create(group_id: params[:group_id],
-                   name:       venue_params['venue-name'], postal_code: venue_params['postal-code'],
-                   prefecture: venue_params['prefecture'], city:        venue_params['city'],
-                   street1:    venue_params['address1'],   street2:     venue_params['address2'])
+    @venue = Venue.create(venue_params)
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
   def venue_params
+    # NoMethodError: undefined method `deep_transform_keys' for ActionController::Parameters
+    # なのでネスト先にもkebab-case あるので、今回はここで明示的に transform_keys(&:underscore) を行う
     @venue_params ||=
-      {}.merge(params.permit('venue-name'))
-        .merge(params.require(:address).permit('postal-code', 'prefecture', 'city',
-                                               'address1', 'address2'))
+      {}.merge(params.permit('venue-name', 'group_id')
+        .merge(params.require('address')
+                     .permit('postal-code', 'prefecture', 'city', 'address1', 'address2'))
+        .transform_keys { |k| k == 'venue-name' ? 'name' : k })
+        .transform_keys { |k| k =~ /address(\d)/ ? "street#{Regexp.last_match(1)}" : k }
+        .transform_keys(&:underscore)
   end
 end

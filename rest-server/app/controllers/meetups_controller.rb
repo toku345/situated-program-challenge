@@ -5,9 +5,7 @@ class MeetupsController < ApplicationController
 
   def create
     @meetup =
-      Meetup.create(group_id: params[:group_id],
-                    title: meetup_params['title'], venue_id: meetup_params['venue-id'],
-                    start_at: meetup_params['start-at'], end_at: meetup_params['end-at'])
+      Meetup.create(meetup_params)
   end
 
   def show
@@ -17,6 +15,7 @@ class MeetupsController < ApplicationController
   private
 
   def meetup_params
-    @meetup_params ||= params.permit('title', 'start-at', 'end-at', 'venue-id')
+    @meetup_params ||=
+      snake_params.permit('title', 'start_at', 'end_at', 'venue_id', 'group_id')
   end
 end
