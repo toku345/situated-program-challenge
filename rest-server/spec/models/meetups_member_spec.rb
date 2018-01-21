@@ -2,8 +2,8 @@
 #
 # Table name: meetups_members
 #
-#  meetup_id :integer          not null
-#  member_id :integer          not null
+#  meetup_id :integer          not null, primary key
+#  member_id :integer          not null, primary key
 #
 
 require 'rails_helper'
