@@ -29,5 +29,12 @@ module RestServer
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # PostgreSQLのenumを使っているため schema.rb が正常に出力できない
+    # structure.sql は正常に吐き出せるので schema_formatを SQL 変更
+    # http://www.task-notes.com/entry/20170118/1484665656
+    #
+    # NOTE: `rake db:structure:dump` するとエラーがでるが今回は問題なさげ
+    config.active_record.schema_format = :sql
   end
 end

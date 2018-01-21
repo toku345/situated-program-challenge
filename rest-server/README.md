@@ -23,6 +23,8 @@
 
 ## テスト実行
 
+    $ env RAILS_ENV=test ./bin/rails db:create
+    $ env RAILS_ENV=test ./bin/rails db:structure:load
     $ ./bin/bundle exec rspec
 
 ### ファイル更新を契機にテスト実行させる

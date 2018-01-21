@@ -46,7 +46,7 @@ jobs:
 
       - run:
           name: Database setup
-          command: cd ./rest-server; bin/rails db:schema:load --trace
+          command: cd ./rest-server; bin/rails db:structure:load --trace
 
       # Run rspec in parallel
       - type: shell
