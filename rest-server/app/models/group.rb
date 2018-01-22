@@ -18,6 +18,6 @@ class Group < ApplicationRecord
   has_many :meetups, dependent: :destroy
 
   def admins
-    members.includes(:groups_members).where(groups_members: { admin: true })
+    members.eager_load(:groups_members).where(groups_members: { admin: true })
   end
 end
