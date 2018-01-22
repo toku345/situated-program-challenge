@@ -6,7 +6,7 @@ describe 'members_meetups API', type: :request do
     let!(:member2)       { create(:member) }
     let!(:group)         { create(:group) }
     let!(:groups_member) { create(:groups_member, group: group, member: member2) }
-    let!(:venue)         { create(:venue, group: group) }
+    let!(:venue)         { create(:physical_venue, group: group) }
     let!(:meetup)        { create(:meetup, group: group, venue: venue) }
 
     let(:expected_response_body) do

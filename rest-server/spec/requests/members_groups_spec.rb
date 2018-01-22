@@ -5,7 +5,7 @@ describe 'members_groups API', type: :request do
     context 'admin = true のとき' do
       let(:member)          { create(:member) }
       let(:group)           { create(:group) }
-      let!(:venue)          { create(:venue, group: group) }
+      let!(:venue)          { create(:physical_venue, group: group) }
       let!(:meetup)         { create(:meetup, group: group, venue: venue) }
       let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
 
@@ -79,7 +79,7 @@ describe 'members_groups API', type: :request do
     context 'admin = false のとき' do
       let(:member)          { create(:member) }
       let(:group)           { create(:group) }
-      let!(:venue)          { create(:venue, group: group) }
+      let!(:venue)          { create(:physical_venue, group: group) }
       let!(:meetup)         { create(:meetup, group: group, venue: venue) }
       let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
 

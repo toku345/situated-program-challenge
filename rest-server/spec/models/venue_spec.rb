@@ -21,8 +21,16 @@
 require 'rails_helper'
 
 describe Venue, type: :model do
-  # DB連携、factory_bot 設定などの確認のための簡単なテスト
-  it 'DBに正常に追加できること' do
-    expect { create(:venue) }.to change(Venue, :count).by 1
+  it '適切なvennue_typeでDBに正常に追加できること' do
+    aggregate_failures do
+      expect { create(:venue) }.to change(Venue, :count).by 1
+      expect(Venue.first.venue_type).to eq 'physical'
+
+      expect { create(:physical_venue) }.to change(PhysicalVenue, :count).by 1
+      expect(PhysicalVenue.first.venue_type).to eq 'physical'
+
+      expect { create(:online_venue) }.to change(OnlineVenue, :count).by 1
+      expect(OnlineVenue.first.venue_type).to eq 'online'
+    end
   end
 end

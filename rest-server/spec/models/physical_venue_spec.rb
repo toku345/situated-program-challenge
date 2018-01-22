@@ -18,8 +18,13 @@
 #  venues_name  (name)
 #
 
-class Venue < ApplicationRecord
-  belongs_to :group
+require 'rails_helper'
 
-  enum venue_type: { physical: 'physical', online: 'online' }
+describe PhysicalVenue, type: :model do
+  it '適切なvennue_typeでDBに正常に追加できること' do
+    aggregate_failures do
+      expect { create(:physical_venue) }.to change(PhysicalVenue, :count).by 1
+      expect(PhysicalVenue.first.venue_type).to eq 'physical'
+    end
+  end
 end

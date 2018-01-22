@@ -5,7 +5,7 @@ describe 'groups API', type: :request do
     let!(:groups_member)  { create(:groups_member, admin: true) }
     let(:group)           { groups_member.group }
     let(:member)          { groups_member.member }
-    let!(:venue)          { create(:venue, group: group) }
+    let!(:venue)          { create(:physical_venue, group: group) }
     let!(:meetup)         { create(:meetup, group: group, venue: venue) }
     let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
 

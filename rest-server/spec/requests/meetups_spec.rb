@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'meetups API', type: :request do
   describe 'GET /groups/{group-id}/meetups' do
     let!(:group)          { create(:group) }
-    let!(:venue)          { create(:venue, group: group) }
+    let!(:venue)          { create(:physical_venue, group: group) }
     let!(:meetup)         { create(:meetup, group: group, venue: venue) }
     let!(:member)         { create(:member) } # グループ非加入だけどミートアップ参加メンバー
     let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
@@ -52,7 +52,7 @@ describe 'meetups API', type: :request do
 
   describe 'POST /groups/{group-id}/meetups' do
     let!(:group)         { create(:group) }
-    let!(:venue)         { create(:venue, group: group) }
+    let!(:venue)         { create(:physical_venue, group: group) }
     let!(:member)        { create(:member) }
     let!(:groups_member) { create(:groups_member, group: group, member: member) }
 
@@ -98,7 +98,7 @@ describe 'meetups API', type: :request do
 
   describe 'GET /groups/{group-id}/meetups/{event-id}' do
     let!(:group)          { create(:group) }
-    let!(:venue)          { create(:venue, group: group) }
+    let!(:venue)          { create(:physical_venue, group: group) }
     let!(:meetup)         { create(:meetup, group: group, venue: venue) }
     let!(:member)         { create(:member) } # グループ非加入だけどミートアップ参加メンバー
     let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
