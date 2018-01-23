@@ -34,4 +34,33 @@ describe 'online-venues API', type: :request do
       end
     end
   end
+
+  describe 'POST /groups/{group-id}/online-venues' do
+    let(:group) { create(:group) }
+    let(:params) do
+      {
+        'venue-name' => 'テスト会場',
+        'url'        => 'https://example.com/online-venues/1'
+      }
+    end
+
+    let(:expected_response_body) do
+      {
+        'online-venue-id' => Integer,
+        'venue-name'      => 'テスト会場',
+        'url'             => 'https://example.com/online-venues/1'
+      }
+    end
+
+    it '会場の登録ができること' do
+      aggregate_failures do
+        expect do
+          post "/groups/#{group.id}/online-venues", params: params
+        end.to change(OnlineVenue, :count).by 1
+
+        expect(response).to be_success
+        expect(response.body).to be_json_as(expected_response_body)
+      end
+    end
+  end
 end
