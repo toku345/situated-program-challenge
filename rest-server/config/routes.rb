@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   end
   resources :groups, defaults: { format: :json }, only: [:index, :create] do
     resources :venues, only: [:index, :create]
+    resources :online_venues, path: '/online-venues', only: [:index]
     resources :meetups, only: [:index, :create, :show]
   end
 end
