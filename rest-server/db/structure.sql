@@ -88,7 +88,8 @@ CREATE TABLE meetups (
     start_at timestamp without time zone,
     end_at timestamp without time zone,
     venue_id integer,
-    group_id integer
+    group_id integer,
+    online_venue_id integer
 );
 
 

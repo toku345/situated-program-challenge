@@ -2,12 +2,13 @@
 #
 # Table name: meetups
 #
-#  id       :integer          not null, primary key
-#  title    :text             not null
-#  start_at :datetime
-#  end_at   :datetime
-#  venue_id :integer
-#  group_id :integer
+#  id              :integer          not null, primary key
+#  title           :text             not null
+#  start_at        :datetime
+#  end_at          :datetime
+#  venue_id        :integer
+#  group_id        :integer
+#  online_venue_id :integer
 #
 # Indexes
 #

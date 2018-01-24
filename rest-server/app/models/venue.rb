@@ -10,6 +10,8 @@
 #  street1     :text
 #  street2     :text
 #  group_id    :integer
+#  url         :text
+#  venue_type  :enum             default("physical")
 #
 # Indexes
 #
