@@ -24,7 +24,7 @@ FactoryBot.define do
 
     association :group, factory: :group
 
-    factory :physical_venue do
+    factory :physical_venue, class: 'PhysicalVenue' do
       venue_type :physical
 
       postal_code { Faker::Address.postcode }
@@ -34,7 +34,7 @@ FactoryBot.define do
       street2     { Faker::Address.secondary_address }
     end
 
-    factory :online_venue do
+    factory :online_venue, class: 'OnlineVenue' do
       venue_type :online
       url { Faker::Internet.url('example.com') }
     end

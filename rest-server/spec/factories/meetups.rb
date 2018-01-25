@@ -21,7 +21,8 @@ FactoryBot.define do
     start_at { Time.current + 2.weeks } # 2週間後
     end_at   { start_at + 1.hour }
 
-    association :group, factory: :group
-    association :venue, factory: :venue
+    association :group,        factory: :group
+    association :venue,        factory: :physical_venue
+    association :online_venue, factory: :online_venue
   end
 end
