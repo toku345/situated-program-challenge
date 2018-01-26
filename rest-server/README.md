@@ -28,3 +28,7 @@
 ### ファイル更新を契機にテスト実行させる
 
     $ ./bin/bundle exec guard
+
+### ER図作成
+
+    $ ./bin/rake erd

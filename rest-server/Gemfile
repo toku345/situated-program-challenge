@@ -39,6 +39,8 @@ group :development, :test do
   gem 'rspec_junit_formatter'
   gem 'rspec-json_matcher'
   gem 'bullet'
+
+  gem 'rails-erd'
 end
 
 group :development do
