@@ -26,7 +26,7 @@ FactoryBot.define do
     trait :physical_venue do
       after(:create) do |meetup|
         physical_venue = create(:physical_venue, group: meetup.group)
-        meetup.update_attribute(:venue_id, physical_venue.id)
+        meetup.update_attributes(venue_id: physical_venue.id)
       end
     end
 
