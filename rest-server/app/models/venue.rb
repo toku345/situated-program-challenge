@@ -20,7 +20,7 @@
 
 class Venue < ApplicationRecord
   belongs_to :group
-  has_many :meetups
+  has_many :meetups, dependent: :nullify
 
   enum venue_type: { physical: 'physical', online: 'online' }
 end
