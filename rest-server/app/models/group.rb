@@ -14,7 +14,8 @@
 class Group < ApplicationRecord
   has_many :groups_members, dependent: :destroy
   has_many :members, through: :groups_members
-  has_many :venues, dependent: :destroy
+  has_many :venues, dependent: :destroy, class_name: 'PhysicalVenue'
+  has_many :online_venues, dependent: :destroy, class_name: 'OnlineVenue'
   has_many :meetups, dependent: :destroy
 
   def admins
