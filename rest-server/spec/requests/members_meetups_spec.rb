@@ -2,12 +2,13 @@ require 'rails_helper'
 
 describe 'members_meetups API', type: :request do
   describe 'POST /members/{member-id}/meetups/{event-id}' do
-    let!(:member)        { create(:member) } # グループ非加入メンバー
-    let!(:member2)       { create(:member) }
+    let!(:member)        { create(:member) } # グループ非加入メンバーだけどミートアップ参加 => responseに含まれない
+    let!(:member2)       { create(:member) } # グループ加入済みだけどミートアップ非参加 => responseに含まれない
     let!(:group)         { create(:group) }
     let!(:groups_member) { create(:groups_member, group: group, member: member2) }
     let!(:venue)         { create(:physical_venue, group: group) }
-    let!(:meetup)        { create(:meetup, group: group, venue: venue) }
+    let!(:online_venue)  { create(:online_venue, group: group) }
+    let!(:meetup)        { create(:meetup, group: group, venue: venue, online_venue: online_venue) }
 
     let(:expected_response_body) do
       {
@@ -25,6 +26,11 @@ describe 'members_meetups API', type: :request do
             'address1'    => venue.street1,
             'address2'    => venue.street2
           }
+        },
+        'online-venue' => {
+          'online-venue-id' => online_venue.id,
+          'venue-name'      => online_venue.name,
+          'url'             => online_venue.url
         },
         'members' => [
           {
