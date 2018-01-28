@@ -5,9 +5,9 @@ describe 'venues API', type: :request do
     let(:group1) { create(:group) }
     let(:group2) { create(:group) }
 
-    let!(:venue1_1) { create(:venue, group: group1) }
-    let!(:venue1_2) { create(:venue, group: group1) }
-    let!(:venue2_1) { create(:venue, group: group2) }
+    let!(:venue1_1) { create(:physical_venue, group: group1) }
+    let!(:venue1_2) { create(:physical_venue, group: group1) }
+    let!(:venue2_1) { create(:physical_venue, group: group2) }
 
     let(:expected_response_body) do
       [

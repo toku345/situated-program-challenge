@@ -2,12 +2,15 @@ require 'rails_helper'
 
 describe 'meetups API', type: :request do
   describe 'GET /groups/{group-id}/meetups' do
-    let!(:group)          { create(:group) }
-    let!(:venue)          { create(:venue, group: group) }
-    let!(:meetup)         { create(:meetup, group: group, venue: venue) }
-    let!(:member)         { create(:member) } # グループ非加入だけどミートアップ参加メンバー
+    let!(:group) { create(:group) }
+
+    let!(:venue)        { create(:physical_venue, group: group) }
+    let!(:online_venue) { create(:online_venue, group: group) }
+    let!(:meetup)       { create(:meetup, group: group, venue: venue, online_venue: online_venue) }
+
+    let!(:member)         { create(:member) } # グループ非加入だけどミートアップ参加メンバー => responseに含まれる
     let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
-    let!(:member2)        { create(:member) }
+    let!(:member2)        { create(:member) } # グループ加入済みだけどミートアップ非参加 => responseに含まれない
     let!(:groups_member)  { create(:groups_member, group: group, member: member2) }
 
     let(:expected_response_body) do
@@ -27,6 +30,11 @@ describe 'meetups API', type: :request do
               'address1'    => venue.street1,
               'address2'    => venue.street2
             }
+          },
+          'online-venue' => {
+            'online-venue-id' => online_venue.id,
+            'venue-name'      => online_venue.name,
+            'url'             => online_venue.url
           },
           'members' => [
             {
@@ -52,16 +60,18 @@ describe 'meetups API', type: :request do
 
   describe 'POST /groups/{group-id}/meetups' do
     let!(:group)         { create(:group) }
-    let!(:venue)         { create(:venue, group: group) }
+    let!(:venue)         { create(:physical_venue, group: group) }
+    let!(:online_venue)  { create(:online_venue, group: group) }
     let!(:member)        { create(:member) }
     let!(:groups_member) { create(:groups_member, group: group, member: member) }
 
     let(:params) do
       {
-        'title'    => 'テストミートアップ!',
-        'start-at' => '2018-01-16T00:07:39.140Z',
-        'end-at'   => '2018-01-16T00:09:39.140Z',
-        'venue-id' => venue.id
+        'title'           => 'テストミートアップ!',
+        'start-at'        => '2018-01-16T00:07:39.140Z',
+        'end-at'          => '2018-01-16T00:09:39.140Z',
+        'venue-id'        => venue.id,
+        'online-venue-id' => online_venue.id
       }
     end
 
@@ -82,6 +92,11 @@ describe 'meetups API', type: :request do
             'address2'    => venue.street2
           }
         },
+        'online-venue' => {
+          'online-venue-id' => online_venue.id,
+          'venue-name'      => online_venue.name,
+          'url'             => online_venue.url
+        },
         'members' => []
       }
     end
@@ -97,12 +112,15 @@ describe 'meetups API', type: :request do
   end
 
   describe 'GET /groups/{group-id}/meetups/{event-id}' do
-    let!(:group)          { create(:group) }
-    let!(:venue)          { create(:venue, group: group) }
-    let!(:meetup)         { create(:meetup, group: group, venue: venue) }
-    let!(:member)         { create(:member) } # グループ非加入だけどミートアップ参加メンバー
+    let!(:group) { create(:group) }
+
+    let!(:venue)        { create(:physical_venue, group: group) }
+    let!(:online_venue) { create(:online_venue, group: group) }
+    let!(:meetup)       { create(:meetup, group: group, venue: venue, online_venue: online_venue) }
+
+    let!(:member)         { create(:member) } # グループ非加入だけどミートアップ参加メンバー => responseに含まれる
     let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
-    let!(:member2)        { create(:member) }
+    let!(:member2)        { create(:member) } # グループ加入済みだけどミートアップ非参加 => responseに含まれない
     let!(:groups_member)  { create(:groups_member, group: group, member: member2) }
 
     let(:expected_response_body) do
@@ -121,6 +139,11 @@ describe 'meetups API', type: :request do
             'address1'    => venue.street1,
             'address2'    => venue.street2
           }
+        },
+        'online-venue' => {
+          'online-venue-id' => online_venue.id,
+          'venue-name'      => online_venue.name,
+          'url'             => online_venue.url
         },
         'members' => [
           {

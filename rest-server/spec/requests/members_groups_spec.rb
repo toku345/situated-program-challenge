@@ -3,10 +3,15 @@ require 'rails_helper'
 describe 'members_groups API', type: :request do
   describe 'POST /members/{member-id}/groups/{group-id}' do
     context 'admin = true のとき' do
-      let(:member)          { create(:member) }
-      let(:group)           { create(:group) }
-      let!(:venue)          { create(:venue, group: group) }
-      let!(:meetup)         { create(:meetup, group: group, venue: venue) }
+      let(:member) { create(:member) }
+      let(:group)  { create(:group) }
+
+      let!(:venue)        { create(:physical_venue, group: group) }
+      let!(:online_venue) { create(:online_venue, group: group) }
+      let!(:meetup) do
+        create(:meetup, group: group, venue: venue, online_venue: online_venue)
+      end
+
       let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
 
       let(:expected_response_body) do
@@ -34,6 +39,13 @@ describe 'members_groups API', type: :request do
               }
             }
           ],
+          'online-venues' => [
+            {
+              'online-venue-id' => online_venue.id,
+              'venue-name'      => online_venue.name,
+              'url'             => online_venue.url
+            }
+          ],
           'meetups' => [
             {
               'event-id' => meetup.id,
@@ -50,6 +62,12 @@ describe 'members_groups API', type: :request do
                   'address1'    => venue.street1,
                   'address2'    => venue.street2
                 }
+              },
+              'online-venue' =>
+              {
+                'online-venue-id' => online_venue.id,
+                'venue-name'      => online_venue.name,
+                'url'             => online_venue.url
               },
               'members' => [
                 {
@@ -77,10 +95,15 @@ describe 'members_groups API', type: :request do
     end
 
     context 'admin = false のとき' do
-      let(:member)          { create(:member) }
-      let(:group)           { create(:group) }
-      let!(:venue)          { create(:venue, group: group) }
-      let!(:meetup)         { create(:meetup, group: group, venue: venue) }
+      let(:member) { create(:member) }
+      let(:group)  { create(:group) }
+
+      let!(:venue)        { create(:physical_venue, group: group) }
+      let!(:online_venue) { create(:online_venue, group: group) }
+      let!(:meetup) do
+        create(:meetup, group: group, venue: venue, online_venue: online_venue)
+      end
+
       let!(:meetups_member) { create(:meetups_member, meetup: meetup, member: member) }
 
       let(:expected_response_body) do
@@ -101,6 +124,13 @@ describe 'members_groups API', type: :request do
               }
             }
           ],
+          'online-venues' => [
+            {
+              'online-venue-id' => online_venue.id,
+              'venue-name'      => online_venue.name,
+              'url'             => online_venue.url
+            }
+          ],
           'meetups' => [
             {
               'event-id' => meetup.id,
@@ -117,6 +147,11 @@ describe 'members_groups API', type: :request do
                   'address1'    => venue.street1,
                   'address2'    => venue.street2
                 }
+              },
+              'online-venue' => {
+                'online-venue-id' => online_venue.id,
+                'venue-name'      => online_venue.name,
+                'url'             => online_venue.url
               },
               'members' => [
                 {

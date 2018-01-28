@@ -17,7 +17,8 @@
 
 class Meetup < ApplicationRecord
   belongs_to :group
-  belongs_to :venue
+  belongs_to :venue,        class_name: 'PhysicalVenue', required: false, inverse_of: :meetups
+  belongs_to :online_venue, class_name: 'OnlineVenue',   required: false, inverse_of: :meetups
   has_many :meetups_members, dependent: :destroy
   has_many :members, through: :meetups_members
 end

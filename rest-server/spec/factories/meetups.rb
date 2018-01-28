@@ -22,6 +22,19 @@ FactoryBot.define do
     end_at   { start_at + 1.hour }
 
     association :group, factory: :group
-    association :venue, factory: :venue
+
+    trait :physical_venue do
+      after(:create) do |meetup|
+        physical_venue = create(:physical_venue, group: meetup.group)
+        meetup.update_attributes(venue_id: physical_venue.id)
+      end
+    end
+
+    trait :online_venue do
+      after(:create) do |meetup|
+        online_venue = create(:online_venue, group: meetup.group)
+        meetup.update_attributes(online_venue_id: online_venue.id)
+      end
+    end
   end
 end

@@ -16,6 +16,6 @@ class MeetupsController < ApplicationController
 
   def meetup_params
     @meetup_params ||=
-      snake_params.permit('title', 'start_at', 'end_at', 'venue_id', 'group_id')
+      snake_params.permit('title', 'start_at', 'end_at', 'venue_id', 'online_venue_id', 'group_id')
   end
 end

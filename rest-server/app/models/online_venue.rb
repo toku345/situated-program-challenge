@@ -18,9 +18,7 @@
 #  venues_name  (name)
 #
 
-class Venue < ApplicationRecord
-  belongs_to :group
-  has_many :meetups, dependent: :nullify
-
-  enum venue_type: { physical: 'physical', online: 'online' }
+class OnlineVenue < Venue
+  after_create -> { self.venue_type = :online }
+  default_scope -> { where(venue_type: 'online') }
 end

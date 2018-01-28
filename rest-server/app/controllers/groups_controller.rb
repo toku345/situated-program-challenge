@@ -1,6 +1,6 @@
 class GroupsController < ApplicationController
   def index
-    @groups = Group.includes(:venues, :meetups).order(id: :asc)
+    @groups = Group.includes(:venues, :online_venues, :meetups).order(id: :asc)
   end
 
   def create
