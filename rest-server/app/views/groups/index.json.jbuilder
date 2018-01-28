@@ -9,6 +9,12 @@ json.array! @groups do |group|
     end
   end
 
+  json.online_venues do
+    json.array!(group.online_venues) do |online_venue|
+      json.partial! 'partials/online_venue', online_venue: online_venue
+    end
+  end
+
   json.meetups do
     json.array!(group.meetups) do |meetup|
       json.partial! 'partials/meetup', meetup: meetup
